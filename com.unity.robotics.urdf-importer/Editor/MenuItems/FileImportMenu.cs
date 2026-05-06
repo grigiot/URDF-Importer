@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace Unity.Robotics.UrdfImporter.Editor
 {
+    /// <summary>
+    /// This is the Window you get when you select "Import Robot from Selected URDF file"
+    /// </summary>
     public class FileImportMenu : EditorWindow
     {
         public string urdfFile;
