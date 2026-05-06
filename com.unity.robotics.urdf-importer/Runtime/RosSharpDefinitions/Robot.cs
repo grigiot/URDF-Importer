@@ -32,6 +32,7 @@ namespace Unity.Robotics.UrdfImporter
 
         public List<Link> links;
         public List<Joint> joints;
+        public List<Sensor> sensors;
         public List<Plugin> plugins;
         public List<Tuple<string, string>> ignoreCollisionPair;
 
@@ -47,6 +48,7 @@ namespace Unity.Robotics.UrdfImporter
             materials = ReadMaterials(node);
             links = ReadLinks(node);
             joints = ReadJoints(node);
+            sensors = ReadSensors(node);
             plugins = ReadPlugins(node);
             ignoreCollisionPair = ReadDisableCollision(node);
             
@@ -69,6 +71,7 @@ namespace Unity.Robotics.UrdfImporter
 
             links = new List<Link>();
             joints = new List<Joint>();
+            sensors = new List<Sensor>();
             plugins = new List<Plugin>();
             materials = new List<Link.Visual.Material>();
         }
@@ -107,11 +110,18 @@ namespace Unity.Robotics.UrdfImporter
             return joints.ToList();
         }
 
+        private static List<Sensor> ReadSensors(XElement node)
+        {
+            var sensors =
+                from child in node.Elements("sensor")
+                select new Sensor(child);
+            return sensors.ToList();
+        }
         private List<Plugin> ReadPlugins(XElement node)
         {
             var plugins =
                 from child in node.Elements()
-                where child.Name != "link" && child.Name != "joint" && child.Name != "material"
+                where child.Name != "link" && child.Name != "joint" && child.Name != "material" && child.Name != "sensor"
                 select new Plugin(child.ToString());
             return plugins.ToList();
         }
@@ -165,6 +175,8 @@ namespace Unity.Robotics.UrdfImporter
                     link.WriteToUrdf(writer);
                 foreach (var joint in joints)
                     joint.WriteToUrdf(writer);
+                foreach (var sensor in sensors)
+                    sensor.WriteToUrdf(writer);
                 foreach (var plugin in plugins)
                     plugin.WriteToUrdf(writer);
                 
