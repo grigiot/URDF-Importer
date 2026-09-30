@@ -141,6 +141,22 @@ namespace Unity.Robotics.UrdfImporter
             return false;
         }
 
+        private static void ProcessSensors(ImportPipelineData im)
+        {
+            if (im.robot.sensors == null)
+            {
+                return;
+            }
+            foreach (var sensor in im.robot.sensors)
+            {
+                var linkGameObject = im.robotGameObject
+                    .GetComponentsInChildren<UrdfLink>()
+                    .First<UrdfLink>(urdfLink => urdfLink.name == sensor.parent)
+                    .gameObject;
+                UrdfSensor.Create(linkGameObject, sensor);
+            }
+        }
+
         // Post creation stuff: add to parent, fix axis and add collision exceptions.
         private static void ImportPipelinePostCreate(ImportPipelineData im)
         {
@@ -190,6 +206,8 @@ namespace Unity.Robotics.UrdfImporter
                     yield return null;
                 }
             }
+            
+            ProcessSensors(im); // add sensors like cameras as children of the `parent` tag in the `sensor` tag
 
             ImportPipelinePostCreate(im);
             yield return im.robotGameObject;

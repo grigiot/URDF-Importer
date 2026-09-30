@@ -68,9 +68,9 @@ namespace Unity.Robotics.UrdfImporter
             public uint width; // pixels
             public uint height; // pixels
             public string format; // TODO: uncertain about what are the encodings
-            public double hfov; // radians
-            public double near; // m
-            public double far; // m
+            public float hfov; // radians
+            public float near; // m
+            public float far; // m
 
             public Camera(XElement node)
             {
@@ -80,19 +80,19 @@ namespace Unity.Robotics.UrdfImporter
                     width = 0;
                     height = 0;
                     format = "";
-                    hfov = double.NaN;
-                    near = double.NaN;
-                    far = double.NaN;
+                    hfov = float.NaN;
+                    near = float.NaN;
+                    far = float.NaN;
                 }
                 width = (uint)image.Attribute("width");
                 height = (uint)image.Attribute("height");
                 format = (string)image.Attribute("format");
-                hfov = (double)image.Attribute("hfov");
-                near = (double)image.Attribute("near");
-                far = (double)image.Attribute("far");
+                hfov = (float)image.Attribute("hfov");
+                near = (float)image.Attribute("near");
+                far = (float)image.Attribute("far");
             }
 
-            public Camera(uint width, uint height, string format, double hfov, double near, double far)
+            public Camera(uint width, uint height, string format, float hfov, float near, float far)
             {
                 this.width = width;
                 this.height = height;
